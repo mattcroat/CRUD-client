@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import Product from '../components/Product';
+import { getAllProducts } from '../API';
 
 class Products extends Component {
   state = {
@@ -8,9 +9,7 @@ class Products extends Component {
   }
 
   componentDidMount() {
-    const API_URL = 'http://localhost:5000/api/v1/products';
-    fetch(API_URL)
-      .then(res => res.json())
+    getAllProducts()
       .then(products => {
         setTimeout(() => {
           this.setState({
@@ -24,7 +23,6 @@ class Products extends Component {
   render() {
     return (
       <div>
-        <h1>Products Page</h1>
         { 
           this.state.isLoading
           ?
@@ -33,14 +31,7 @@ class Products extends Component {
           <div className="row">
           {
             this.state.products.map(product => (
-              <div className="card col-4">
-                <img src={product.image} alt={product.title} className="card-img-top"/>
-                <div className="card-body">
-                  <h5 className="card-title">{product.title}</h5>
-                  <p className="card-text">{product.description}</p>
-                  <Link to={`/products/${product.id}`} className="btn btn-primary">View product</Link>
-                </div>
-              </div>
+              <Product key={product.id} product={product} cols="col-4" />
             ))
             }
           </div>
